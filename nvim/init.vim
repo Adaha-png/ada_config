@@ -7,7 +7,7 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'kshenoy/vim-signature' " dont remember what this does
     Plug 'vimwiki/vimwiki' " make wikis
     Plug 'ap/vim-buftabline' " tabs are stupid make it buffers instead
-    Plug 'nvim-tree/nvim-tree.lua' " filelist with C-n
+    Plug 'preservim/nerdtree' " filelist with C-n
     Plug 'folke/tokyonight.nvim' " dark mode theme
     Plug 'chaoren/vim-wordmotion' " make underscores and camelCase word boundaries
     Plug 'benlubas/molten-nvim', { 'do': ':UpdateRemotePlugins' } " jupyter notebook plugin
@@ -15,13 +15,15 @@ call plug#end()
 lua require('Comment').setup()
 
 " holds configs for lua only plugins
-luafile $XDG_CONFIG_HOME/nvim/lua.lua
+    " luafile ~/.config/nvim/lua.lua
+
 
 
 
 let g:buftabline_show=1
 let g:pyindent_open_paren=shiftwidth()
 let g:netrw_banner=0
+let g:coc_node_path = '/uio/hume/student-u79/adaha/.config/nvim/node/bin/node'
 
 " indents
 set smartindent
@@ -45,8 +47,7 @@ set spelllang=nb,en
 
 
 
-
-
+autocmd BufWritePost *.py silent! execute '!ruff format %'
 
 " folds
 set foldlevel=99
@@ -161,6 +162,8 @@ nnoremap <leader>c :colorscheme
 
 nnoremap <leader>h :call SynStack()<CR>
 
+nnoremap <Tab> :NERDTreeToggle<CR>
+
 " go to the position I was when last editing the file
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g'\"" | endif
 
@@ -168,7 +171,7 @@ set title
 set titlestring=nvim\ \ \ %F
 
 " keep undo history even after closing file
-set undodir=$XDG_DATA_HOME/nvim/undo_dir
+set undodir=$HOME/.config/nvim/undo_dir
 set undofile
 
 
