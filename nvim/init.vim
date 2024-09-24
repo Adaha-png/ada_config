@@ -18,12 +18,11 @@ lua require('Comment').setup()
     " luafile ~/.config/nvim/lua.lua
 
 
-
+let NERDTreeQuitOnOpen=1
 
 let g:buftabline_show=1
 let g:pyindent_open_paren=shiftwidth()
 let g:netrw_banner=0
-let g:coc_node_path = '/uio/hume/student-u79/adaha/.config/nvim/node/bin/node'
 
 " indents
 set smartindent
@@ -47,8 +46,7 @@ set spelllang=nb,en
 
 
 
-autocmd BufWritePost *.py silent! execute '!ruff format %'
-
+autocmd BufWritePost *.py silent! execute '!ruff format % && ruff check --select I --fix % && ruff check %'
 " folds
 set foldlevel=99
 nnoremap <BS> za
