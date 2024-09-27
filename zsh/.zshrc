@@ -98,11 +98,9 @@ alias mc="make clean"
 alias python='python3'
 alias pip='pip3'
 alias py="python3 -q"
-alias act='source env/bin/activate'
+alias act='source .venv/bin/activate'
 
 # other aliases
-alias sshuio='ssh -YC jonatahh@login.ifi.uio.no'
-alias uiomount='sshfs -o reconnect,ServerAliveInterval=2 jonatahh@login.ifi.uio.no:. ~/ifilokal/ifilokal'
 alias :q='exit'
 alias c='z' # c is easier to hit
 alias pac='sudo pacman -Syu'
@@ -119,6 +117,13 @@ function cd() {
         new_directory=${HOME};
     fi;
     builtin cd -- "${new_directory}" && ls
+}
+
+
+function lazygit() {
+    git add -u
+    git commit -m "$1"
+    git push
 }
 
 

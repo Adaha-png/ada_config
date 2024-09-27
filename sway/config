@@ -182,6 +182,7 @@ mode "normal" {
     bindsym $mod+Escape mode "default"
 
 }
+
 bindsym $mod+Escape mode "normal"
 
 bindsym $mod+Tab workspace back_and_forth
