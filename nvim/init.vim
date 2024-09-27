@@ -148,6 +148,7 @@ nnoremap <leader>t :tabnew
 nnoremap <leader>v :vsplit
 " replace alt som ble soekt paa sist
 nnoremap <leader>s :%s///g<Left><Left>
+vnoremap <leader>s :s///g<Left><Left>
 " bedre shift yank
 map Y y$
 " format python
@@ -186,7 +187,6 @@ function! SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
-
 
 " ------------- molten ------------------
 
@@ -303,7 +303,8 @@ autocmd FileType r nnoremap <leader>r {opng("temp")<esc>}Odev.off()<CR>system("x
 let g:pencil#wrapModeDefault = 'soft'
 
 autocmd FileType markdown call pencil#init()
-autocmd FileType markdown map <buffer> <C-b> :w<CR>:exec '!pandoc % --standalone --output %<.pdf'<CR>
+autocmd FileType markdown map <buffer> <C-b> :w<CR>:exec '!pandoc % --standalone --output %<.html'<CR>
+autocmd FileType markdown map <buffer> <leader>z :exec '!firefox %<.html'<CR>
 autocmd FileType tex imap <buffer> <C-b> <esc>:w<CR>:exec '!pandoc % -o %<.pdf &'<CR><CR>:echo "Building in background..."<CR>
 
 
