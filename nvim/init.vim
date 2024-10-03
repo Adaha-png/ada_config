@@ -46,7 +46,7 @@ set spelllang=nb,en
 
 
 
-autocmd BufWritePost *.py silent! execute '!ruff format % && ruff check --select I --fix % && ruff check %'
+autocmd BufWritePost *.py silent! execute '!ruff format % && ruff check --select I --fix % && touch /tmp/tmp.pw.socket2'
 " folds
 set foldlevel=99
 nnoremap <BS> za
