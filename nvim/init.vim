@@ -46,10 +46,9 @@ set spelllang=nb,en
 
 
 
-autocmd BufWritePost *.py silent! execute '!ruff format % && ruff check --select I --fix % && touch /tmp/tmp.pw.socket2'
+autocmd BufWritePost *.py silent! execute '!ruff format % && ruff check --select I --fix % && ruff check %'
 " folds
 set foldlevel=99
-nnoremap <BS> za
 
 
 " statusline stuff
@@ -63,6 +62,8 @@ set statusline+=\ \[%{&fileencoding?&fileencoding:&encoding}\]
 set statusline+=\ %p%%
 set statusline+=\ %l:%c
 set statusline+=\ 
+set ignorecase
+set smartcase
 " end statusline
 
 " do an operator on every line in the file (daG, yaG, =aG)
@@ -121,7 +122,8 @@ function! WordMotionToggle()
 endfunction
 
 " remove highlight for last searched
-nnoremap <Enter> :noh<CR>
+nnoremap <leader><Backspace> :noh<CR>
+nnoremap <Enter> :!touch /tmp/tmp.pw.socket2<CR><CR>
 nnoremap <Tab> :NvimTreeToggle<CR>
 
 
@@ -155,7 +157,7 @@ map Y y$
 " make print(x) into print(f"{x=}")
 nnoremap <leader>f 0f(af"{<ESC>$i=}"<ESC>
 nnoremap <leader>m :delmarks!<CR>
-nnoremap <leader>z :!zathura %<.pdf & <CR><CR>
+nnoremap <leader>z :!zathura %<.pdf & disown<CR><CR>
 nnoremap <silent> <leader>d :bp<BAR>bd#<CR>
 nnoremap <leader>c :colorscheme 
 
@@ -187,23 +189,6 @@ function! SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
-
-" ------------- molten ------------------
-
-nnoremap <silent>       <leader>rm :MoltenInit python3<CR>
-
-nnoremap <silent>       <leader>e  :MoltenEvaluateOperator<CR>
-nnoremap <silent>       <leader>rr :MoltenEvaluateLine<CR>
-xnoremap <silent>       <leader>r  :<C-u>MoltenEvaluateVisual<CR>
-nnoremap <silent>       <leader>rc :MoltenReevaluateCell<CR>
-" nnoremap <silent>       <leader>rd :MoltenDelete<CR>
-nnoremap <silent>       <leader>ro :noautocmd MoltenEnterOutput<CR>
-
-nnoremap <silent>       <leader>rs :MoltenSave<CR>
-nnoremap <silent>       <leader>rl :MoltenLoad<CR>
-
-let g:magma_automatically_open_output = v:false
-
 
 
 " ------------ COC ---------------- "
@@ -255,12 +240,40 @@ autocmd FileType c command! Main execute "normal! i#include <stdlib.h><CR><CR>vo
 autocmd FileType python map <buffer> <C-b> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
 autocmd FileType python imap <buffer> <C-b> <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
 " pyright sucks at diagnostics
-autocmd FileType python let b:coc_diagnostic_disable=1
-autocmd FileType python nnoremap <leader>b :!black %<CR>
+
 autocmd FileType python set foldmethod=indent
 
+nnoremap <leader>l :call CocAction('diagnosticToggle')<CR>
+
+
 " ------- latex ---------
-autocmd FileType tex map <buffer> <C-b> :w<CR>:exec '!pdflatex %'<CR>
+"
+
+function! TexCompile()
+  " Save the current file
+  write
+  
+  " Try to run 'make' and check its exit status
+  silent execute '!make'
+  
+  " If 'make' fails, run 'pdflatex'
+  if v:shell_error != 0
+    execute '!pdflatex ' . expand('%')
+    silent execute '!bibtex ' . expand('%')
+    silent execute '!pdflatex ' . expand('%')
+  endif
+endfunction
+
+function! ToggleSpellCheck()
+  if &spell
+    set nospell
+  else
+    set spell
+  endif
+endfunction
+
+autocmd FileType tex map <buffer> <C-b> :call TexCompile()<CR>
+autocmd FileType tex map <leader>l :call ToggleSpellCheck()<CR>
 autocmd FileType tex imap <buffer> <C-b> <esc>:w<CR>:exec '!pdflatex %'<CR>
 autocmd FileType tex set spell
 autocmd FileType tex call pencil#init({'wrap': 'soft'})

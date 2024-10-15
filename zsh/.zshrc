@@ -24,6 +24,7 @@ alias ifi='ssh adaha@ifi.uio.no'
 # z
 source ~/.config/zsh/z.zsh
 source ~/.config/zsh/termtitle.zsh
+alias f="z"
 
 export GRIM_DEFAULT_DIR="$HOME/pictures"
 export GPG_TTY=$(tty)
@@ -66,7 +67,8 @@ alias history="history 0"
 
 # aliases
 
-alias ls="exa --icons --time-style=long-iso"
+alias l="exa --icons --time-style=long-iso"
+alias ls="exa --icons --time-style=long-iso -a"
 alias tree="tree -L 3 -C"
 alias mv='mv --interactive'
 alias v='nvim'
@@ -98,7 +100,7 @@ alias mc="make clean"
 alias python='python3'
 alias pip='pip3'
 alias py="python3 -q"
-alias act='source .venv/bin/activate'
+alias a='source a'
 
 # other aliases
 alias :q='exit'
@@ -116,7 +118,7 @@ function cd() {
     if [ $# -eq 0 ]; then 
         new_directory=${HOME};
     fi;
-    builtin cd -- "${new_directory}" && ls
+    builtin cd -- "${new_directory}" && l
 }
 
 
