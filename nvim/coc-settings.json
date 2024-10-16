@@ -3,6 +3,7 @@
 	"inlayHint.enable": false,
     "r.lsp.diagnostics": false,
 	"python.formatting.provider": "ruff",
+	"python.formatting.blackPath": "/usr/bin/ruff",
 	"coc.preferences.formatOnSaveFiletypes": ["python"],
     "languageserver": {
 		"godot": {
@@ -11,7 +12,7 @@
 			"port": 6008
 		}
     },
-    "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/15.0.6/clangd_15.0.6/bin/clangd"
+    "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/15.0.6/clangd_15.0.6/bin/clangd",
 }
 
 
