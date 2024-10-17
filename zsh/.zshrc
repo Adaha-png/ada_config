@@ -18,9 +18,7 @@ fi
 
 
 alias v='nvim'
-alias ls='eza --icons'
-alias ifi='ssh adaha@ifi.uio.no'
-
+alias s='ssh'
 # z
 source ~/.config/zsh/z.zsh
 source ~/.config/zsh/termtitle.zsh
