@@ -11,7 +11,7 @@ font pango:SourceCodePro Medium 13
 
 
 ### Output configuration
-output * bg $HOME/.config/sway/backgrounds/union.png fill
+output * bg $HOME/.config/sway/backgrounds/anime-anime-girls-ecchi-1977615-wallhere.com.jpg fill
 #
 # Example configuration:
 #
@@ -29,7 +29,8 @@ bindsym $mod+Return exec $term
 
 bindsym $mod+x kill
 # bindsym button2 exec $term
-bindsym $mod+d exec pgrep wofi >/dev/null 2>&1 && killall wofi || wofi -I --show drun
+bindsym Super_L exec pgrep wofi >/dev/null 2>&1 && killall wofi || wofi -I --show drun
+
 bindsym $mod+Shift+d exec wofi --show run
 
 # Drag floating windows by holding down $mod and left mouse button.
