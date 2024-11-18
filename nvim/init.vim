@@ -1,7 +1,6 @@
 call plug#begin(stdpath('data') . '/plugged')
     Plug 'neoclide/coc.nvim', {'branch': 'release'} " lsp
     Plug 'numToStr/Comment.nvim' " gc for comments
-    Plug 'reedes/vim-pencil' " better for long lines
     Plug 'sonph/onehalf', { 'rtp' : 'vim' } " theme
     Plug 'itchyny/vim-gitbranch' " git statusline
     Plug 'kshenoy/vim-signature' " dont remember what this does
@@ -10,10 +9,14 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'preservim/nerdtree' " filelist with C-n
     Plug 'folke/tokyonight.nvim' " dark mode theme
     Plug 'chaoren/vim-wordmotion' " make underscores and camelCase word boundaries
+    Plug 'RRethy/vim-illuminate' " highlight same word as hover
+    Plug 'vim-python/python-syntax', " jupyter notebook plugin
     Plug 'benlubas/molten-nvim', { 'do': ':UpdateRemotePlugins' } " jupyter notebook plugin
+
 call plug#end()
 lua require('Comment').setup()
 
+let g:python_highlight_all = 1
 " holds configs for lua only plugins
     " luafile ~/.config/nvim/lua.lua
 
@@ -30,7 +33,6 @@ set expandtab
 set breakindent
 set shiftwidth=4
 set tabstop=4
-
 " -------- visuals ----------
 set relativenumber
 set number
@@ -44,6 +46,7 @@ colorscheme tokyonight
 
 set spelllang=nb,en
 
+hi Search guibg=#49364a
 
 
 autocmd BufWritePost *.py silent! execute '!ruff format % && ruff check --select I --fix % && ruff check %'
@@ -126,6 +129,18 @@ nnoremap <leader><Backspace> :noh<CR>
 nnoremap <Enter> :!touch /tmp/tmp.pw.socket2<CR><CR>
 nnoremap <Tab> :NvimTreeToggle<CR>
 
+
+function! ProseStart()
+  setlocal linebreak
+  nnoremap <buffer> j gj
+  nnoremap <buffer> k gk
+endfunction
+
+function! ProseStop()
+  setlocal nolinebreak
+  unmap <buffer> j
+  unmap <buffer> k
+endfunction
 
 " schmoovement
 noremap J }
@@ -248,6 +263,7 @@ nnoremap <leader>l :call CocAction('diagnosticToggle')<CR>
 
 " ------- latex ---------
 "
+autocmd FileType text,markdown,vimwiki,tex call ProseStart()
 
 function! TexCompile()
   " Save the current file
@@ -272,11 +288,17 @@ function! ToggleSpellCheck()
   endif
 endfunction
 
+function! GrepSearchWord()
+  let l:search_term = input('Enter search term: ')
+  execute 'term grep --binary-files=without-match --exclude-dir={.venv,.ruff_cache,__pycache__} -Rnw . -e ' . shellescape(l:search_term)
+endfunction
+
+nnoremap <leader>/ :call GrepSearchWord()<CR>
+
 autocmd FileType tex map <buffer> <C-b> :call TexCompile()<CR>
 autocmd FileType tex map <leader>l :call ToggleSpellCheck()<CR>
 autocmd FileType tex imap <buffer> <C-b> <esc>:w<CR>:exec '!pdflatex %'<CR>
 autocmd FileType tex set spell
-autocmd FileType tex call pencil#init({'wrap': 'soft'})
 autocmd FileType tex set conceallevel=0
 autocmd FileType tex nnoremap <leader>b :!bibtex %<<CR>
 autocmd FileType tex nnoremap <leader>v :!biber %<<CR>
@@ -313,11 +335,9 @@ autocmd FileType r nnoremap <leader>r {opng("temp")<esc>}Odev.off()<CR>system("x
 
 
 " ------ markdown --------
-let g:pencil#wrapModeDefault = 'soft'
 
-autocmd FileType markdown call pencil#init()
-autocmd FileType markdown map <buffer> <C-b> :w<CR>:exec '!pandoc % --standalone --output %<.html'<CR>
-autocmd FileType markdown map <buffer> <leader>z :exec '!firefox %<.html'<CR>
+autocmd FileType markdown map <buffer> <C-b> :w<CR>:exec '!pandoc % --standalone --output .%<.html'<CR>
+autocmd FileType markdown map <buffer> <leader>z :exec '!firefox .%<.html'<CR>
 autocmd FileType tex imap <buffer> <C-b> <esc>:w<CR>:exec '!pandoc % -o %<.pdf &'<CR><CR>:echo "Building in background..."<CR>
 
 
@@ -328,6 +348,4 @@ autocmd BufRead scp://* set cmdheight=2 " this is to stop stupid confirmation me
 " dont show buffers in vimwiki because there are so many
 " autocmd FileType vimwiki let g:buftabline_show=0
 
-autocmd FileType text call pencil#init()
-autocmd FileType vimwiki call pencil#init()
 

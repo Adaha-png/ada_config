@@ -137,7 +137,19 @@ function ranger-cd {
     rm -f -- "$tempfile"
 }
 
+function d {
+    swaymsg 'workspace 2'
+    if ! pgrep -x "firefox" > /dev/null; then
+        firefox 2> /dev/null 1> /dev/null &!
+    fi
+    
+    swaymsg 'workspace 2'
+    if ! pgrep -x "discord" > /dev/null; then
+        discord 2> /dev/null 1> /dev/null &!
+    fi
 
+    swaymsg 'layout tabbed'
+}
 bindkey -s '^R' 'ranger-cd\n'
 
 
