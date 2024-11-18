@@ -78,6 +78,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias cal='cal -m'
 alias nohloop="while true; do; tail -n 500 nohup.out; sleep 10; done;"
+alias act='source .venv/bin/activate'
 
 # git aliases
 alias gs="git status"
