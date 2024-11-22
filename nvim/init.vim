@@ -16,9 +16,10 @@ call plug#begin(stdpath('data') . '/plugged')
 call plug#end()
 lua require('Comment').setup()
 
+
 let g:python_highlight_all = 1
-" holds configs for lua only plugins
-    " luafile ~/.config/nvim/lua.lua
+
+lua require('open_file_at_line')
 
 
 let NERDTreeQuitOnOpen=1
@@ -102,6 +103,8 @@ let g:wordmotion_on = 0
 
 nnoremap <buffer> <nowait> <leader>w :call WordMotionToggle()<cr>
 
+
+nnoremap <silent> <leader>o :lua require('open_file_at_line').open_file_at_line()<CR>
 
 function! WordMotionToggle()
     if g:wordmotion_on
@@ -290,7 +293,7 @@ endfunction
 
 function! GrepSearchWord()
   let l:search_term = input('Enter search term: ')
-  execute 'term grep --binary-files=without-match --exclude-dir={.venv,.ruff_cache,__pycache__} -Rnw . -e ' . shellescape(l:search_term)
+  execute 'term grep --binary-files=without-match --exclude-dir={.venv,.ruff_cache,__pycache__} -Rn . -e ' . shellescape(l:search_term)
 endfunction
 
 nnoremap <leader>/ :call GrepSearchWord()<CR>

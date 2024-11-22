@@ -68,7 +68,7 @@ alias history="history 0"
 
 # aliases
 
-alias l="exa --icons --time-style=long-iso"
+alias l='exa --icons --time-style=long-iso --ignore-glob="__pycache__"'
 alias ls="exa --icons --time-style=long-iso -a"
 alias tree="tree -L 3 -C"
 alias mv='mv --interactive'
