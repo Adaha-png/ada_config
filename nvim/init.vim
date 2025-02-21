@@ -9,6 +9,7 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'folke/tokyonight.nvim' " dark mode theme
     Plug 'chaoren/vim-wordmotion' " make underscores and camelCase word boundaries
     Plug 'RRethy/vim-illuminate' " highlight same word as hover
+    Plug 'tpope/vim-surround', 
     Plug 'vim-python/python-syntax', 
     Plug 'yaegassy/coc-ruff', {'do': 'yarn install --frozen-lockfile'}
     Plug 'neovim/nvim-lspconfig'
