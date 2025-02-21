@@ -1,10 +1,9 @@
-# Logo key. Use Mod1 for Alt.
 set $mod Mod1
 set $left h
 set $down j
 set $up k
 set $right l
-set $term alacritty
+set $term kitty
 set $menu wofi -I --show drun
 
 font pango:SourceCodePro Medium 13
@@ -27,11 +26,11 @@ exec swayidle -w \
 ### Key bindings
 bindsym $mod+Return exec $term
 
-bindsym $mod+x kill
-# bindsym button2 exec $term
-bindsym Super_L exec pgrep wofi >/dev/null 2>&1 && killall wofi || wofi -I --show drun
+bindsym $mod+x exec sh $HOME/.config/sway/scratch.sh
+bindsym $mod+Shift+x kill
+bindsym $mod+g exec sh $HOME/.config/sway/unscratch.sh
 
-bindsym $mod+Shift+d exec wofi --show run
+bindsym Super_L exec pgrep wofi >/dev/null 2>&1 && killall wofi || wofi -I --show drun
 
 # Drag floating windows by holding down $mod and left mouse button.
 floating_modifier $mod normal
@@ -59,6 +58,14 @@ bindsym $mod+Shift+$up move up 30px
 bindsym $mod+Shift+$right move right 30px
 
 # Workspaces:
+input Logitech_USB-PS/2_Optical_Mouse {
+    left_handed enabled
+    tap enabled
+    natural_scroll disabled
+    dwt enabled
+    accel_profile "flat" # disable mouse acceleration (enabled by default; to set it manually, use "adaptive" instead of "flat")
+    pointer_accel 1 # set mouse sensitivity (between -1 and 1)
+}
 
 # Switch to workspace
 bindsym $mod+1 workspace number 1
@@ -163,8 +170,6 @@ mode "normal" {
     bindsym space floating toggle
     bindsym Shift+space focus mode_toggle
     bindsym a focus parent
-    bindsym s move scratchpad
-    bindsym g scratchpad show
 
 
 
@@ -240,7 +245,6 @@ bindsym $mod+Shift+a focus parent
 
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
-bindsym $mod+g scratchpad show
 
 bindsym $mod+up exec playerctl play-pause
 bindsym $mod+right exec playerctl next
@@ -309,12 +313,12 @@ exec nm-applet --indicator
 
 # ----------  visuals ------------
 
-default_border pixel 4
+default_border pixel 3
 gaps inner 10
-# gaps outer 5
 
 # window colors
 # 				border background text indicator
-client.focused '#00aaee' '#00aaee' '#ffffff' '#dddddd'
-client.unfocused '#222222' '#333333' '#888888' '#292d2e'
+client.focused '#00aaee' '#00aaee' '#ffffff'
+client.unfocused '#222222' '#333333' '#888888'
 
+corner_radius 10
