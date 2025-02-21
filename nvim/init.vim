@@ -12,6 +12,7 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'RRethy/vim-illuminate' " highlight same word as hover
     Plug 'vim-python/python-syntax', " jupyter notebook plugin
     Plug 'benlubas/molten-nvim', { 'do': ':UpdateRemotePlugins' } " jupyter notebook plugin
+    Plug 'tpope/vim-surround', 
 
 call plug#end()
 lua require('Comment').setup()
