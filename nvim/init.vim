@@ -3,24 +3,27 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'numToStr/Comment.nvim' " gc for comments
     Plug 'sonph/onehalf', { 'rtp' : 'vim' } " theme
     Plug 'itchyny/vim-gitbranch' " git statusline
-    Plug 'kshenoy/vim-signature' " dont remember what this does
-    Plug 'vimwiki/vimwiki' " make wikis
+    Plug 'kshenoy/vim-signature' " marks
     Plug 'ap/vim-buftabline' " tabs are stupid make it buffers instead
     Plug 'preservim/nerdtree' " filelist with C-n
     Plug 'folke/tokyonight.nvim' " dark mode theme
     Plug 'chaoren/vim-wordmotion' " make underscores and camelCase word boundaries
     Plug 'RRethy/vim-illuminate' " highlight same word as hover
-    Plug 'vim-python/python-syntax', " jupyter notebook plugin
-    Plug 'benlubas/molten-nvim', { 'do': ':UpdateRemotePlugins' } " jupyter notebook plugin
-
+    Plug 'vim-python/python-syntax', 
+    Plug 'yaegassy/coc-ruff', {'do': 'yarn install --frozen-lockfile'}
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'lervag/vimtex'
+    Plug 'ap/vim-css-color'
 call plug#end()
+
+luafile $XDG_CONFIG_HOME/nvim/lua.lua
+
 lua require('Comment').setup()
 
 
 let g:python_highlight_all = 1
 
 lua require('open_file_at_line')
-
 
 let NERDTreeQuitOnOpen=1
 
@@ -47,8 +50,8 @@ colorscheme tokyonight
 
 set spelllang=nb,en
 
-hi Search guibg=#49364a
-
+hi Search guibg=#40334a
+hi Search guifg=#8888FF
 
 autocmd BufWritePost *.py silent! execute '!ruff format % && ruff check --select I --fix % && ruff check %'
 " folds
@@ -129,7 +132,7 @@ endfunction
 
 " remove highlight for last searched
 nnoremap <leader><Backspace> :noh<CR>
-nnoremap <Enter> :!touch /tmp/tmp.pw.socket2<CR><CR>
+" nnoremap <Enter> :!touch /tmp/tmp.pw.socket2<CR><CR>
 nnoremap <Tab> :NvimTreeToggle<CR>
 
 
@@ -266,6 +269,21 @@ nnoremap <leader>l :call CocAction('diagnosticToggle')<CR>
 
 " ------- latex ---------
 "
+
+hi MatchParen guifg=#f2b252 gui=none
+
+autocmd FileType tex nnoremap <CR> :VimtexTocToggle<CR>
+
+let g:vimtex_toc_config = {
+    \ 'layers' : ['content'],
+    \ 'mode' : 1,
+    \ 'show_help' : 0,
+    \ 'tocdepth' : 2,
+    \ 'indent_levels' : 1,
+    \ 'split_pos' : 'full',
+    \}
+
+" hi texDelim guifg=wheat
 autocmd FileType text,markdown,vimwiki,tex call ProseStart()
 
 function! TexCompile()
@@ -298,9 +316,9 @@ endfunction
 
 nnoremap <leader>/ :call GrepSearchWord()<CR>
 
-autocmd FileType tex map <buffer> <C-b> :call TexCompile()<CR>
+autocmd FileType tex map <buffer> <C-b> :CompileLatex<CR>
 autocmd FileType tex map <leader>l :call ToggleSpellCheck()<CR>
-autocmd FileType tex imap <buffer> <C-b> <esc>:w<CR>:exec '!pdflatex %'<CR>
+autocmd FileType tex imap <buffer> <C-b> <esc> :CompileLatex<CR>
 autocmd FileType tex set spell
 autocmd FileType tex set conceallevel=0
 autocmd FileType tex nnoremap <leader>b :!bibtex %<<CR>

@@ -5,14 +5,8 @@
 	"python.formatting.provider": "ruff",
 	"python.formatting.blackPath": "/usr/bin/ruff",
 	"coc.preferences.formatOnSaveFiletypes": ["python"],
-    "languageserver": {
-		"godot": {
-			"host": "127.0.0.1",
-			"filetypes": ["gdscript"],
-			"port": 6008
-		}
-    },
     "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/15.0.6/clangd_15.0.6/bin/clangd",
+    "coc.source.vimtex.filetypes": ["tex"]
 }
 
 

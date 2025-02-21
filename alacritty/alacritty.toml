@@ -1,6 +1,3 @@
-import = [
-"/home/ada/.config/alacritty/opacity.toml",
-]
 
 [font]
 size = 13
@@ -72,3 +69,8 @@ args = ["-0.05"]
 [[keyboard.bindings]]
 action = "Copy"
 key = "Copy"
+
+[general]
+import = [
+"/home/ada/.config/alacritty/opacity.toml",
+]
