@@ -13,8 +13,11 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'vim-python/python-syntax', 
     Plug 'yaegassy/coc-ruff', {'do': 'yarn install --frozen-lockfile'}
     Plug 'neovim/nvim-lspconfig'
-    Plug 'lervag/vimtex'
     Plug 'ap/vim-css-color'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'stevearc/aerial.nvim'
 call plug#end()
 
 let $HOST = split(system('hostname'), '\.')[0]  " Get only the first part before '.'
@@ -154,8 +157,12 @@ function! ProseStop()
 endfunction
 
 " schmoovement
-noremap J }
-noremap K {
+noremap J :keepjumps normal! }<CR>
+noremap K :keepjumps normal! {<CR>
+
+xnoremap J :<C-u>keepjumps normal! gv}<CR>
+xnoremap K :<C-u>keepjumps normal! gv{<CR>
+
 nnoremap } J
 
 
@@ -163,7 +170,6 @@ nnoremap } J
 nnoremap S :w<CR>
 " M is for middle of screen but who cares. M for Make this damn file close
 nnoremap M :q<CR>
-
 " U is undo line which is stupid
 nnoremap U <C-r>
 
@@ -174,6 +180,7 @@ nnoremap L :bnext<CR>
 " aapne tabs og splits
 nnoremap <leader>t :tabnew
 nnoremap <leader>v :vsplit
+nnoremap <leader>g :lua require('telescope.builtin').find_files()<CR>
 " replace alt som ble soekt paa sist
 nnoremap <leader>s :%s///g<Left><Left>
 vnoremap <leader>s :s///g<Left><Left>
@@ -268,33 +275,16 @@ nnoremap <leader>l :call CocAction('diagnosticToggle')<CR>
 
 hi MatchParen guifg=#f2b252 gui=none
 
-autocmd FileType tex nnoremap <CR> :VimtexTocToggle<CR>
-
-let g:vimtex_toc_config = {
-    \ 'layers' : ['content'],
-    \ 'mode' : 1,
-    \ 'show_help' : 0,
-    \ 'tocdepth' : 2,
-    \ 'indent_levels' : 1,
-    \ 'split_pos' : 'full',
-    \}
 
 " hi texDelim guifg=wheat
 autocmd FileType text,markdown,vimwiki,tex call ProseStart()
 
 function! TexCompile()
   " Save the current file
-  write
-  
-  " Try to run 'make' and check its exit status
-  silent execute '!make'
-  
-  " If 'make' fails, run 'pdflatex'
-  if v:shell_error != 0
+    write
     execute '!pdflatex ' . expand('%')
-    silent execute '!bibtex ' . expand('%')
+    silent execute '!biber main'
     silent execute '!pdflatex ' . expand('%')
-  endif
 endfunction
 
 function! ToggleSpellCheck()
@@ -312,9 +302,11 @@ endfunction
 
 nnoremap <leader>/ :call GrepSearchWord()<CR>
 
-autocmd FileType tex map <buffer> <C-b> :CompileLatex<CR>
-autocmd FileType tex map <leader>l :call ToggleSpellCheck()<CR>
-autocmd FileType tex imap <buffer> <C-b> <esc> :CompileLatex<CR>
+
+autocmd FileType tex imap <buffer> <C-b> <esc>:silent !latexmk -pdf<CR>
+autocmd FileType tex map <buffer> <C-b> <esc>:silent !latexmk -pdf<CR>
+autocmd FileType tex map <buffer> <leader>l :w<CR>:exec '!pdflatex %'<CR>
+
 autocmd FileType tex set spell
 autocmd FileType tex set conceallevel=0
 autocmd FileType tex nnoremap <leader>b :!bibtex %<<CR>

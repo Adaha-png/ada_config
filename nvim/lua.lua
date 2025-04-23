@@ -17,17 +17,9 @@ vim.api.nvim_create_user_command('CompileLatex', function()
     local makefile = vim.fn.getcwd() .. '/Makefile'
     if vim.fn.filereadable(makefile) == 1 then
         -- Run make if Makefile exists
-        vim.fn.jobstart({'make'}, {
-            on_stdout = function(_, data)
-                if data then
-                    print(table.concat(data, '\n'))
-                end
-            end,
-            on_stderr = function(_, data)
-                if data then
-                    print(table.concat(data, '\n'))
-                end
-            end,
+        vim.fn.jobstart({'latexmk -pdf'}, {
+            on_stdout = function(_, data) end,
+            on_stderr = function(_, data) end,
             on_exit = function(_, code)
                 if code == 0 then
                     print("Compile successful!")
@@ -60,6 +52,7 @@ vim.api.nvim_create_user_command('CompileLatex', function()
         })
     end
 end, {})
+
 local function my_on_attach(bufnr)
     local api = require "nvim-tree.api"
 
@@ -75,6 +68,24 @@ local function my_on_attach(bufnr)
     vim.keymap.set('n', '<CR>', api.node.open.edit, opts("Open"))
 end
 
+vim.keymap.set('n', '<leader>g', function()
+  local is_git = os.execute('git') == 0
+  if is_git then
+    require("telescope.builtin").git_files()
+  else
+    require("telescope.builtin").find_files()
+  end
+end)
+
+require'nvim-treesitter.configs'.setup {
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      node_incremental = "<cr>",
+      node_decremental = "<backspace>",
+    },
+  },
+}
 -- pass to setup along with your other options
 vim.api.nvim_create_autocmd("QuitPre", {
   callback = function()
@@ -93,6 +104,49 @@ vim.api.nvim_create_autocmd("QuitPre", {
   end
 })
 
+
+require('aerial').setup({
+    opts = {
+        ensure_installed = { 'bash', 'c', 'diff', 'html', 'latex', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python' },
+        -- Autoinstall languages that are not installed
+        auto_install = true,
+        highlight = {
+            enable = true,
+            -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+            --  If you are experiencing weird indenting issues, add the language to
+            --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+            additional_vim_regex_highlighting = false,
+        },
+        indent = { enable = true },
+    },
+
+    backends = {
+        ['_']  = {"lsp", "treesitter"},
+        python = {"treesitter"},
+        rust   = {"lsp"},
+    },
+    on_attach = function(bufnr)
+        -- Jump forwards/backwards with '{' and '}'
+        vim.keymap.set("n", "q", ":AerialClose<CR>", { buffer = bufnr })
+        vim.keymap.set("n", "<Esc>", ":AerialClose<CR>", { buffer = bufnr })
+    end,
+
+    close_on_select = true,
+    layout = {
+        default_direction = 'prefer_left',
+        min_width = {50, 0.3},
+    },
+    keymaps = {
+        ['<esc>'] = "actions.close",
+        ['H'] = "actions.tree_decrease_fold_level",
+        ['L'] = "actions.tree_increase_fold_level",},
+
+})
+
+-- You probably also want to set a keymap to toggle aerial
+vim.keymap.set("n", "<CR>", "<cmd>AerialToggle<CR>")
+
+
 local M = {}
 
 function M.open_file_at_line()
@@ -107,3 +161,4 @@ function M.open_file_at_line()
   end
 end
 return M
+
