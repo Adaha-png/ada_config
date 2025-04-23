@@ -45,12 +45,13 @@ echo "⣿⣿⣿⣿⠿⡿⠟⠛⣋⣉⣥⣤⣶⠆⢸⣿⡇⣿⣿⣿⣿⣿⡏⠻�
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣮⠛⢿⣿⣿⣿⣿⣿⣷⠌⣿⠀⣤⣄⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⢐⣿⣿⣿⣿⣿"
 
 alias v='nvim'
-alias s='ssh'
+alias s='nvim main.tex'
 # z
 source ~/.config/zsh/z.zsh
 source ~/.config/zsh/termtitle.zsh
 alias f="z"
 
+alias uiomount='sshfs -o reconnect,ServerAliveInterval=2 adaha@login.ifi.uio.no:. ~/ifilokal/ifilokal'
 export GRIM_DEFAULT_DIR="$HOME/pictures"
 export GPG_TTY=$(tty)
 
