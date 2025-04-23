@@ -1,6 +1,6 @@
 function title {
   setopt localoptions nopromptsubst
-  print -Pn "\e]2;${1:q}\a" # set title name
+  print -Pn "\e]2;${${(s:.:)$(hostname)}[1]}:${1:q}\a" # set title name
 }
 
 # Runs before showing the prompt

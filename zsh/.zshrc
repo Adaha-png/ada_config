@@ -1,6 +1,6 @@
 #!/bin/zsh
 #
-PATH=$PATH:~/.local/bin
+PATH=$HOME/.local/bin:$PATH
 # options
 setopt dotglob
 # Use powerline
@@ -17,6 +17,18 @@ fi
 if [[ -e /usr/share/zsh/manjaro-zsh-prompt ]]; then
   source /usr/share/zsh/manjaro-zsh-prompt
 fi
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export ZDOTDIR=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_PICTURES_DIR="$HOME/pictures"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_BIN_HOME="$HOME/.local/bin"
+export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+export XDG_CONFIG_DIRS="/etc/xdg"
+
+
 
 echo "⣿⣿⣿⣿⠿⡿⠟⠛⣋⣉⣥⣤⣶⠆⢸⣿⡇⣿⣿⣿⣿⣿⡏⠻⣿⣿⣿⣿⣷⡙⡏⣿⣿⣿⣿⣿⣷⡌⢿⣷⡘⣿⣿⣿⣿⡇⣿⣿⣿⣿
 ⣿⣿⣶⣿⣿⣿⢰⣿⡏⣼⣿⣿⣿⠀⢸⣿⡇⢿⣿⣿⣿⣿⡇⠇⢹⣿⣿⣿⣏⠳⠘⢹⣿⡈⢿⣿⣿⠻⡌⣿⣿⡜⣿⣿⣿⡇⣿⣿⣿⣿
@@ -45,6 +57,7 @@ echo "⣿⣿⣿⣿⠿⡿⠟⠛⣋⣉⣥⣤⣶⠆⢸⣿⡇⣿⣿⣿⣿⣿⡏⠻�
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣮⠛⢿⣿⣿⣿⣿⣿⣷⠌⣿⠀⣤⣄⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⢐⣿⣿⣿⣿⣿"
 
 alias v='nvim'
+alias lv="nvim -c':e#<1'"
 alias s='ssh'
 # z
 source ~/.config/zsh/z.zsh
@@ -103,7 +116,8 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias cal='cal -m'
-alias nohloop="while true; do; tail -n 500 nohup.out; sleep 1; done;"
+alias nohloop="while true; do; tail -n 50 nohup.out; sleep 1; done;"
+alias nohuppy="nohup python3 -u -Wignore"
 alias act='source .venv/bin/activate'
 
 # git aliases
@@ -186,12 +200,3 @@ export PYTHONSTARTUP=$HOME/.config/python/pythonrc
 
 export R_LIBS_USER=$HOME/.rlibrary/library
 
-# pyenv stuff
-# export PYENV_ROOT="$HOME/.pyenv"
-# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
-
-
-# i dont remember why i did this
-
-bindkey -v

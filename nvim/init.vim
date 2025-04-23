@@ -17,10 +17,13 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'ap/vim-css-color'
 call plug#end()
 
+let $HOST = split(system('hostname'), '\.')[0]  " Get only the first part before '.'
+let &titlestring = $HOST . '  ' . expand('%:t')
+set title
+
 luafile $XDG_CONFIG_HOME/nvim/lua.lua
 
 lua require('Comment').setup()
-
 
 let g:python_highlight_all = 1
 
@@ -97,6 +100,7 @@ let mapleader=" "
 nnoremap <leader>p "+p
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
+
 
 nnoremap gp :put<CR>
 
@@ -190,21 +194,12 @@ nnoremap <Tab> :NERDTreeToggle<CR>
 " go to the position I was when last editing the file
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g'\"" | endif
 
-set title
-set titlestring=nvim\ \ \ %F
 
 " keep undo history even after closing file
 set undodir=$HOME/.config/nvim/undo_dir
 set undofile
 
 
-" ----------- vimwiki -------------
-let g:vimwiki_list = [{ 'path': '~/dnd_wiki/wiki', 'path_html': '~/dnd_wiki/html', 'auto_export': 0, 'auto_toc': 1, 'links_space_char': '_', 'syntax': 'default' }]
-hi VimwikiLink ctermfg=blue
-let g:vimwiki_global_ext = 0
-
-
-" get highlight group of cursor
 function! SynStack()
   if !exists("*synstack")
     return
